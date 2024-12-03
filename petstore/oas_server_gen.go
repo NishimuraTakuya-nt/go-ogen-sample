@@ -13,7 +13,7 @@ type Handler interface {
 	// Add a new pet to the store.
 	//
 	// POST /pet
-	AddPet(ctx context.Context, req *Pet) (*Pet, error)
+	AddPet(ctx context.Context, req *Pet) (AddPetRes, error)
 	// DeletePet implements deletePet operation.
 	//
 	// Deletes a pet.

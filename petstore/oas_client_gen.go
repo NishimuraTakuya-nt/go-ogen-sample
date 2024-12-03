@@ -28,7 +28,7 @@ type Invoker interface {
 	// Add a new pet to the store.
 	//
 	// POST /pet
-	AddPet(ctx context.Context, request *Pet) (*Pet, error)
+	AddPet(ctx context.Context, request *Pet) (AddPetRes, error)
 	// DeletePet invokes deletePet operation.
 	//
 	// Deletes a pet.
@@ -102,12 +102,12 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 // Add a new pet to the store.
 //
 // POST /pet
-func (c *Client) AddPet(ctx context.Context, request *Pet) (*Pet, error) {
+func (c *Client) AddPet(ctx context.Context, request *Pet) (AddPetRes, error) {
 	res, err := c.sendAddPet(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAddPet(ctx context.Context, request *Pet) (res *Pet, err error) {
+func (c *Client) sendAddPet(ctx context.Context, request *Pet) (res AddPetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("addPet"),
 		semconv.HTTPRequestMethodKey.String("POST"),

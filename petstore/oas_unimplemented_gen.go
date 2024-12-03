@@ -18,7 +18,7 @@ var _ Handler = UnimplementedHandler{}
 // Add a new pet to the store.
 //
 // POST /pet
-func (UnimplementedHandler) AddPet(ctx context.Context, req *Pet) (r *Pet, _ error) {
+func (UnimplementedHandler) AddPet(ctx context.Context, req *Pet) (r AddPetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

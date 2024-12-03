@@ -4,15 +4,114 @@ package api
 
 import (
 	"github.com/go-faster/errors"
+	"github.com/go-faster/jx"
 )
 
 // DeletePetOK is response for DeletePet operation.
 type DeletePetOK struct{}
 
+// Error response structure.
+// Ref: #/components/schemas/ErrorResponse
+type ErrorResponse struct {
+	Details    jx.Raw    `json:"details"`
+	Message    OptString `json:"message"`
+	StatusCode OptInt    `json:"status_code"`
+	Type       OptString `json:"type"`
+}
+
+// GetDetails returns the value of Details.
+func (s *ErrorResponse) GetDetails() jx.Raw {
+	return s.Details
+}
+
+// GetMessage returns the value of Message.
+func (s *ErrorResponse) GetMessage() OptString {
+	return s.Message
+}
+
+// GetStatusCode returns the value of StatusCode.
+func (s *ErrorResponse) GetStatusCode() OptInt {
+	return s.StatusCode
+}
+
+// GetType returns the value of Type.
+func (s *ErrorResponse) GetType() OptString {
+	return s.Type
+}
+
+// SetDetails sets the value of Details.
+func (s *ErrorResponse) SetDetails(val jx.Raw) {
+	s.Details = val
+}
+
+// SetMessage sets the value of Message.
+func (s *ErrorResponse) SetMessage(val OptString) {
+	s.Message = val
+}
+
+// SetStatusCode sets the value of StatusCode.
+func (s *ErrorResponse) SetStatusCode(val OptInt) {
+	s.StatusCode = val
+}
+
+// SetType sets the value of Type.
+func (s *ErrorResponse) SetType(val OptString) {
+	s.Type = val
+}
+
+func (*ErrorResponse) addPetRes()     {}
+func (*ErrorResponse) getPetByIdRes() {}
+
 // GetPetByIdNotFound is response for GetPetById operation.
 type GetPetByIdNotFound struct{}
 
 func (*GetPetByIdNotFound) getPetByIdRes() {}
+
+// NewOptInt returns new OptInt with value set to v.
+func NewOptInt(v int) OptInt {
+	return OptInt{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptInt is optional int.
+type OptInt struct {
+	Value int
+	Set   bool
+}
+
+// IsSet returns true if OptInt was set.
+func (o OptInt) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptInt) Reset() {
+	var v int
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptInt) SetTo(v int) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptInt) Get() (v int, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptInt) Or(d int) int {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
 
 // NewOptInt64 returns new OptInt64 with value set to v.
 func NewOptInt64(v int64) OptInt64 {
@@ -200,6 +299,7 @@ func (s *Pet) SetStatus(val OptPetStatus) {
 	s.Status = val
 }
 
+func (*Pet) addPetRes()     {}
 func (*Pet) getPetByIdRes() {}
 
 // Pet status in the store.

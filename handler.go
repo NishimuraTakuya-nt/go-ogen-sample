@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"sync"
 
 	petstore "github.com/NishimuraTakuya-nt/go-ogen-sample/petstore"
@@ -13,19 +14,42 @@ type handler struct {
 	mux  sync.Mutex
 }
 
-func (p *handler) AddPet(ctx context.Context, req *petstore.Pet) (*petstore.Pet, error) {
+func (p *handler) AddPet(ctx context.Context, req *petstore.Pet) (petstore.AddPetRes, error) {
 	p.mux.Lock()
 	defer p.mux.Unlock()
 
 	p.pets[p.id] = *req
 	p.id++
-	return &petstore.Pet{
+
+	if req.Name == "error" {
+		//return &petstore.ErrorResponse{
+		//	StatusCode: petstore.OptInt{
+		//		Value: 500,
+		//		Set:   true,
+		//	},
+		//	Message: petstore.OptString{
+		//		Value: "error",
+		//		Set:   true,
+		//	},
+		//}, nil
+		return nil, fmt.Errorf("make error")
+	}
+
+	pet := &petstore.Pet{
 		ID: petstore.OptInt64{
 			Value: p.id,
 			Set:   true,
 		},
-		Name: req.Name,
-	}, nil
+		Name:      req.Name,
+		PhotoUrls: []string{"sss"},
+		Status: petstore.OptPetStatus{
+			Value: "available",
+			Set:   true,
+		},
+	}
+
+	return pet, nil
+
 }
 
 func (p *handler) DeletePet(ctx context.Context, params petstore.DeletePetParams) error {

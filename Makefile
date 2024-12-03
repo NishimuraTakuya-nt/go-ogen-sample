@@ -1,4 +1,4 @@
-.PHONY: go-download help
+.PHONY: go-download oas-gen help
 
 # =================== CI ===================
 go-download: ## Download dependencies

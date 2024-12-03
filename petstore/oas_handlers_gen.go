@@ -124,7 +124,7 @@ func (s *Server) handleAddPetRequest(args [0]string, argsEscaped bool, w http.Re
 		}
 	}()
 
-	var response *Pet
+	var response AddPetRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -139,7 +139,7 @@ func (s *Server) handleAddPetRequest(args [0]string, argsEscaped bool, w http.Re
 		type (
 			Request  = *Pet
 			Params   = struct{}
-			Response = *Pet
+			Response = AddPetRes
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
