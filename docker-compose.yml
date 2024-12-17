@@ -1,0 +1,31 @@
+services:
+  swagger-editor:
+    platform: linux/amd64/v8
+    image: swaggerapi/swagger-editor
+    container_name: "swagger-editor"
+    ports:
+      - "8001:8080"
+#    volumes:
+#      - ./petstore.yml:/usr/share/nginx/html/petstore.yml:ro  # プロジェクトのOpenAPI定義をマウント
+#    environment:
+#      SWAGGER_FILE: "/usr/share/nginx/html/petstore.yml"
+#      BASE_URL: "/"
+
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    container_name: "swagger-ui"
+    ports:
+      - "8002:8080"
+    volumes:
+      - ./petstore.yml:/petstore.yml
+    environment:
+      SWAGGER_JSON: /petstore.yml
+
+  swagger-api:
+    image: stoplight/prism:3
+    container_name: "swagger-api"
+    ports:
+      - "8003:4010"
+    command: mock -h 0.0.0.0 /petstore.yml
+    volumes:
+      - ./petstore.yml:/petstore.yml
